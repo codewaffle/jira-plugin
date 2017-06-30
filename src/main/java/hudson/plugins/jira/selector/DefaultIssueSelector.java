@@ -131,8 +131,10 @@ public class DefaultIssueSelector extends AbstractIssueSelector {
             Set<String> issueIds) {
         for (DependencyChange depc : RunScmChangeExtractor.getDependencyChanges(build).values()) {
             for (AbstractBuild<?, ?> b : depc.getBuilds()) {
-                getLogger().finer("Searching for JIRA issues in dependency " + b + " of " + build);
-                addIssuesRecursive(b, site, listener, issueIds);
+                if(b.getProject() != ((AbstractBuild<?, ?>) build).getProject()) {
+                    getLogger().finer("Searching for JIRA issues in dependency " + b + " of " + build);
+                    addIssuesRecursive(b, site, listener, issueIds);
+                }
             }
         }
     }
